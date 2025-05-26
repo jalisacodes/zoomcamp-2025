@@ -17,7 +17,11 @@ def main(params):
     table_name = params.table_name
     csv_name = 'output.csv'
     
-    os.system(f"curl -o {csv_name} {url}")
+    if url.startswith("http"):
+        os.system(f"curl -o output.csv {url}")
+        csv_name = "output.csv"
+    else:
+        csv_name = url
 
     engine = create_engine(f'postgresql://{user}:{password}@{host}:{port}/{db}')
 
@@ -58,13 +62,13 @@ parser = argparse.ArgumentParser(description='Ingest CSV data to Postgres',)
 # url of the csv
 
 if __name__ == '__main__':
-    parser.add_argument('user', help='user name for postgres')    
-    parser.add_argument('password', help='password for postgres')
-    parser.add_argument('host', help='host  for postgres')
-    parser.add_argument('port', help='port for postgres')
-    parser.add_argument('db', help='user name for postgres')
-    parser.add_argument('table_name', help='name of table where we will write the results to')
-    parser.add_argument('url', help='url of csv file')
+    parser.add_argument('--user', help='user name for postgres')    
+    parser.add_argument('--password', help='password for postgres')
+    parser.add_argument('--host', help='host  for postgres')
+    parser.add_argument('--port', help='port for postgres')
+    parser.add_argument('--db', help='user name for postgres')
+    parser.add_argument('--table_name', help='name of table where we will write the results to')
+    parser.add_argument('--url', help='url of csv file')
 
     args = parser.parse_args()
     
